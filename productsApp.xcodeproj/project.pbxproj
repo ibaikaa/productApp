@@ -17,6 +17,8 @@
 		8C26E16429774FCC0091C2D1 /* DeliveryMethodCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C26E16329774FCC0091C2D1 /* DeliveryMethodCollectionViewCell.swift */; };
 		8C26E168297754400091C2D1 /* DeliveryMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C26E167297754400091C2D1 /* DeliveryMethod.swift */; };
 		8C26E16B2977561A0091C2D1 /* configureImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C26E16A2977561A0091C2D1 /* configureImageView.swift */; };
+		8C3346B429797870008A1DA9 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3346B329797870008A1DA9 /* Category.swift */; };
+		8C3346B629797A29008A1DA9 /* CategoryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3346B529797A29008A1DA9 /* CategoryCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +34,8 @@
 		8C26E16329774FCC0091C2D1 /* DeliveryMethodCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveryMethodCollectionViewCell.swift; sourceTree = "<group>"; };
 		8C26E167297754400091C2D1 /* DeliveryMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveryMethod.swift; sourceTree = "<group>"; };
 		8C26E16A2977561A0091C2D1 /* configureImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = configureImageView.swift; sourceTree = "<group>"; };
+		8C3346B329797870008A1DA9 /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
+		8C3346B529797A29008A1DA9 /* CategoryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCollectionViewCell.swift; sourceTree = "<group>"; };
 		BE9DE4F012B16AAE287D06C0 /* Pods_productsApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_productsApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D75E7C21A00ECE40DA92D42E /* Pods-productsApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-productsApp.debug.xcconfig"; path = "Target Support Files/Pods-productsApp/Pods-productsApp.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -111,7 +115,8 @@
 		8C26E15D29774F6E0091C2D1 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				8C26E167297754400091C2D1 /* DeliveryMethod.swift */,
+				8C3346B229797851008A1DA9 /* OrderMethod */,
+				8C3346B12979784B008A1DA9 /* Categories */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -119,6 +124,7 @@
 		8C26E15E29774F770091C2D1 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				8C3346B029797843008A1DA9 /* Categories */,
 				8C26E16029774FAF0091C2D1 /* OrderMethod */,
 			);
 			path = View;
@@ -146,6 +152,30 @@
 				8C26E16A2977561A0091C2D1 /* configureImageView.swift */,
 			);
 			path = Snippets;
+			sourceTree = "<group>";
+		};
+		8C3346B029797843008A1DA9 /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				8C3346B529797A29008A1DA9 /* CategoryCollectionViewCell.swift */,
+			);
+			path = Categories;
+			sourceTree = "<group>";
+		};
+		8C3346B12979784B008A1DA9 /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				8C3346B329797870008A1DA9 /* Category.swift */,
+			);
+			path = Categories;
+			sourceTree = "<group>";
+		};
+		8C3346B229797851008A1DA9 /* OrderMethod */ = {
+			isa = PBXGroup;
+			children = (
+				8C26E167297754400091C2D1 /* DeliveryMethod.swift */,
+			);
+			path = OrderMethod;
 			sourceTree = "<group>";
 		};
 		F592E23ED9503DE60DC70080 /* Frameworks */ = {
@@ -271,12 +301,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8C3346B629797A29008A1DA9 /* CategoryCollectionViewCell.swift in Sources */,
 				8C26E168297754400091C2D1 /* DeliveryMethod.swift in Sources */,
 				8C26E16B2977561A0091C2D1 /* configureImageView.swift in Sources */,
 				8C26E14C29774F1F0091C2D1 /* MainPageController.swift in Sources */,
 				8C26E14829774F1F0091C2D1 /* AppDelegate.swift in Sources */,
 				8C26E16429774FCC0091C2D1 /* DeliveryMethodCollectionViewCell.swift in Sources */,
 				8C26E14A29774F1F0091C2D1 /* SceneDelegate.swift in Sources */,
+				8C3346B429797870008A1DA9 /* Category.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -432,12 +464,13 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = ibaika.productsApp;
+				PRODUCT_BUNDLE_IDENTIFIER = ibaika.jokesApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -461,12 +494,13 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = ibaika.productsApp;
+				PRODUCT_BUNDLE_IDENTIFIER = ibaika.jokesApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

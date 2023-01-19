@@ -17,6 +17,7 @@ class MainPageController: UIViewController {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.indicatorStyle = .black
         collectionView.backgroundColor = .clear
         collectionView.register(
             DeliveryMethodCollectionViewCell.self,
@@ -26,10 +27,15 @@ class MainPageController: UIViewController {
     }()
     
     
+    //categoriesCollectionView
+    
+    
     private func configureDeliveryMethodsCollectionView () {
         deliveryMethodsCollectionView.dataSource = self
         deliveryMethodsCollectionView.delegate = self
     }
+    
+    //configCategoriesCollectionView
     
     private func updateUIForDeliveryCell(configure cell: DeliveryMethodCollectionViewCell, with data: Bool) {
         
@@ -42,9 +48,7 @@ class MainPageController: UIViewController {
         }
     }
     
-    
-    
-    
+    //: маркдаун
     private func updateUI () {
         view.backgroundColor = UIColor(red: 0.898, green: 0.898, blue: 0.898, alpha: 1)
         
@@ -166,7 +170,6 @@ extension MainPageController: UICollectionViewDelegateFlowLayout {
                     style: .default
                 )
             )
-            
             present(errorAlert, animated: true)
         }
         
