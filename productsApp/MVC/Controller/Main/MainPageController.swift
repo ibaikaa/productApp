@@ -117,17 +117,7 @@ extension MainPageController: UICollectionViewDataSource {
                 fatalError()
             }
             let method = deliveryMethodModel.deliveryMethods[indexPath.row]
-            cell.layer.cornerRadius = 16
             cell.configure(method: method)
-            cell.layer.borderColor = UIColor(red: 0.878, green: 0.878, blue: 0.878, alpha: 1).cgColor
-            
-            if method.isCurrentMethod {
-                cell.layer.borderWidth = 0
-                cell.backgroundColor = .customYellow
-            } else {
-                cell.layer.borderWidth = 1
-                cell.backgroundColor = .clear
-            }
             return cell
         } else {
             guard let cell = categoriesCollectionView
@@ -216,6 +206,5 @@ extension MainPageController: UICollectionViewDelegateFlowLayout {
                 fatalError()
             }
         }
-        
     }
 }

@@ -3,10 +3,8 @@
 //  productsApp
 //
 //  Created by ibaikaa on 18/1/23.
-//
 
 import Foundation
-
 
 public struct DeliveryMethod {
     public let name: String
@@ -18,9 +16,7 @@ public struct DeliveryMethodGroup {
     public var deliveryMethods: [DeliveryMethod]
 }
 
-
 extension DeliveryMethodGroup {
-    
     //Функция, позволяющая получить массив из методов доставки
     public static func deliveryMethods() -> DeliveryMethodGroup {
         //Собираем массив методов доставки

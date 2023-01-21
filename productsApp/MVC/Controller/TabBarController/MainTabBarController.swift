@@ -9,6 +9,22 @@ import UIKit
 
 class MainTabBarController: UITabBarController {
     
+    //Method to create VC
+    private func generateVC (
+        viewController: UIViewController,
+        title: String,
+        image: UIImage?
+    )
+    -> UINavigationController {
+        let vc = UINavigationController(rootViewController: viewController)
+        vc.tabBarItem.title = title
+        vc.tabBarItem.image = image
+        vc.navigationBar.topItem?.title = title
+        vc.navigationBar.prefersLargeTitles = true
+        return vc
+    }
+    
+    //Method that generates tab bar
     private func generateTabBar() {
         viewControllers = [
             generateVC(
@@ -30,6 +46,7 @@ class MainTabBarController: UITabBarController {
         self.selectedIndex = 1
     }
     
+    //Method that sets up UI of the tab bar
     private func setTabBarAppearance() {
         let positionOnX: CGFloat = 10
         let positionOnY: CGFloat = 14
@@ -48,32 +65,21 @@ class MainTabBarController: UITabBarController {
             cornerRadius:  height / 2
         )
         
+        //Setting bezier
         roundLayer.path = bezierPath.cgPath
-        
+        //Setting layer to tabBar
         tabBar.layer.insertSublayer(roundLayer, at: 0)
-        
+        //Setting up tabBar width
         tabBar.itemWidth = width / 5
-        
+        //Setting up items positioning
         tabBar.itemPositioning = .centered
-        
+        //Background of custom layer
         roundLayer.fillColor = UIColor.white.cgColor
+        //Setting up tint color of chosen item
         tabBar.tintColor = .tabBarItemAccent
+        //Setting up tint color for non-chosen item
         tabBar.unselectedItemTintColor = .tabBarItemLight
         
-    }
-    
-    private func generateVC (
-        viewController: UIViewController,
-        title: String,
-        image: UIImage?
-    )
-    -> UINavigationController {
-        let vc = UINavigationController(rootViewController: viewController)
-        vc.tabBarItem.title = title
-        vc.tabBarItem.image = image
-        vc.navigationBar.topItem?.title = title
-        vc.navigationBar.prefersLargeTitles = true
-        return vc
     }
     
     override func viewDidLoad() {

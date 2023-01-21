@@ -12,13 +12,12 @@ public struct Category {
     let rectangleIcon: Bool
 }
 
-
 public struct CategoryGroup {
     let categories: [Category]
 }
 
 extension CategoryGroup {
-    
+
     public static func categories() -> CategoryGroup {
         let categories: [Category] = [
             .init(categoryName: "Smartphones", categoryImage: "iphone.homebutton", rectangleIcon: true),
