@@ -10,6 +10,7 @@ import SnapKit
 class MainPageController: UIViewController {
     
     //MARK: Models
+    //productModel
     private var deliveryMethodModel = DeliveryMethodGroup.deliveryMethods()
     private var categoryModel = CategoryGroup.categories()
     
@@ -54,6 +55,14 @@ class MainPageController: UIViewController {
         categoriesCollectionView.dataSource = self
         categoriesCollectionView.delegate = self
     }
+    
+    //productsTableView
+    //configureProductsTableView
+    //extend with 2 protocols
+    //custom tableview cell
+    //networklayer
+    //parse
+    //productmodel
     
     
     //MARK: Method to make constraints
@@ -212,3 +221,4 @@ extension MainPageController {
         }
     }
 }
+
