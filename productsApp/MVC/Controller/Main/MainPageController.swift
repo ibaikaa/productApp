@@ -107,7 +107,6 @@ extension MainPageController: UICollectionViewDataSource {
         cellForItemAt indexPath: IndexPath
     )
     -> UICollectionViewCell {
-        
         if collectionView == deliveryMethodsCollectionView {
             guard let cell = deliveryMethodsCollectionView
                 .dequeueReusableCell (
@@ -149,61 +148,66 @@ extension MainPageController: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
         if collectionView == deliveryMethodsCollectionView {
             //creating cell by indexPath
             guard let cell = deliveryMethodsCollectionView.cellForItem(at: indexPath) as? DeliveryMethodCollectionViewCell else {
                 fatalError()
             }
             
-            //This code allows to avoid unchoosing all the methods that are given
-            //1. We are getting over an array to fing the current method that user chose
-            //2.1. Using guard, we are expecting that in the best case, user wants to switch current unactive delivery method to active. If it is, we pass and move on
-            //2.2 If not, if user wants to unchoose the only active delivery method, we are calling a showAlertIfTryingToUnchooseAll() method, that shows alert and stopping the method.
-            for method in deliveryMethodModel.deliveryMethods {
-                if method.name == cell.getDeliveryMethodNameLabel().text {
-                    guard !method.isCurrentMethod else {
-                        showAlertIfTryingToUnchooseAll()
-                        return
-                    }
-                }
-            }
+            avoidUnchoosingAllDeliveryMethods(currentCell: cell)
             
             //Switching state for tapped cell
             deliveryMethodModel.deliveryMethods[indexPath.row].isCurrentMethod = !deliveryMethodModel.deliveryMethods[indexPath.row].isCurrentMethod
             
             //Switching methods if needed
-            switchMethods()
+            switchMethodState(for: cell)
             
             //Reloading data for this collection view
             deliveryMethodsCollectionView.reloadData()
-            
-            func switchMethods() {
-                for i in 0..<deliveryMethodModel.deliveryMethods.count {
-                    if deliveryMethodModel.deliveryMethods[i].isCurrentMethod && deliveryMethodModel.deliveryMethods[i].name != cell.getDeliveryMethodNameLabel().text {
-                        deliveryMethodModel.deliveryMethods[i].isCurrentMethod = !deliveryMethodModel.deliveryMethods[i].isCurrentMethod
-                    }
+        } else {
+            guard let _ = categoriesCollectionView.cellForItem(at: indexPath) as? CategoryCollectionViewCell else {
+                fatalError()
+            }
+        }
+    }
+}
+
+
+//MARK: Extend MainPageController for all the necessary methods and properties for the Extension of DeliveryMethodsCollectionView Delegate
+extension MainPageController {
+    //This method allows to avoid unchoosing all the methods that are given
+    private func avoidUnchoosingAllDeliveryMethods(currentCell: DeliveryMethodCollectionViewCell) {
+        for method in deliveryMethodModel.deliveryMethods {
+            if method.name == currentCell.getDeliveryMethodNameLabel().text {
+                guard !method.isCurrentMethod else {
+                    present(self.errorAlertInDeliveryMethodsCollectionView, animated: true)
+                    return
                 }
             }
-            
-            func showAlertIfTryingToUnchooseAll() {
-                let errorAlert = UIAlertController (
-                    title: "Должен быть выбран хотя бы 1 из методов доставки.",
-                    message: nil,
-                    preferredStyle: .alert
-                )
-                
-                errorAlert.addAction(
-                    UIAlertAction (
-                        title: "OK",
-                        style: .default
-                    )
-                )
-                present(errorAlert, animated: true)
-            }
-        } else {
-            guard let cell = categoriesCollectionView.cellForItem(at: indexPath) as? CategoryCollectionViewCell else {
-                fatalError()
+        }
+    }
+    
+    //Alert
+    private var errorAlertInDeliveryMethodsCollectionView: UIAlertController {
+        let errorAlert = UIAlertController (
+            title: "Должен быть выбран хотя бы 1 из методов доставки.",
+            message: nil,
+            preferredStyle: .alert
+        )
+        
+        errorAlert.addAction(
+            UIAlertAction (
+                title: "OK",
+                style: .default
+            )
+        )
+        return errorAlert
+    }
+    
+    private func switchMethodState(for cell: DeliveryMethodCollectionViewCell) {
+        for i in 0..<deliveryMethodModel.deliveryMethods.count {
+            if deliveryMethodModel.deliveryMethods[i].isCurrentMethod && deliveryMethodModel.deliveryMethods[i].name != cell.getDeliveryMethodNameLabel().text {
+                deliveryMethodModel.deliveryMethods[i].isCurrentMethod = !deliveryMethodModel.deliveryMethods[i].isCurrentMethod
             }
         }
     }
