@@ -14,20 +14,19 @@ class DeliveryMethodCollectionViewCell: UICollectionViewCell {
     private lazy var deliveryMethodIconImageView: UIImageView = {
         let icon = UIImageView()
         icon.translatesAutoresizingMaskIntoConstraints = false
-        icon.tintColor = UIColor(red: 0.361, green: 0.588, blue: 0.157, alpha: 1)
+        icon.tintColor = .cellLightContent
         icon.backgroundColor = .clear
         return icon
     }()
     
     private lazy var deliveryMethodNameLabel: UILabel = {
         let label = UILabel()
-        label.textColor = UIColor(red: 0.361, green: 0.588, blue: 0.157, alpha: 1)
+        label.textColor = .cellLightContent
         label.font = UIFont(name: "Avenir Next", size: 16)
         return label
     }()
     
     public func getDeliveryMethodNameLabel () -> UILabel { deliveryMethodNameLabel }
-    
     
     public func configure(method: DeliveryMethod) {
         configureImageView(deliveryMethodIconImageView, withIconNamed: method.iconName, cell: DeliveryMethodCollectionViewCell.reuseID)
@@ -35,10 +34,10 @@ class DeliveryMethodCollectionViewCell: UICollectionViewCell {
         
         if method.isCurrentMethod {
             deliveryMethodNameLabel.textColor = .white
-            deliveryMethodIconImageView.tintColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.87)
+            deliveryMethodIconImageView.tintColor = .white
         } else {
-            deliveryMethodNameLabel.textColor = UIColor(red: 0.361, green: 0.588, blue: 0.157, alpha: 1)
-            deliveryMethodIconImageView.tintColor = UIColor(red: 0.361, green: 0.588, blue: 0.157, alpha: 1)
+            deliveryMethodNameLabel.textColor = .cellLightContent
+            deliveryMethodIconImageView.tintColor = .cellLightContent
         }
         initUI()
     }
