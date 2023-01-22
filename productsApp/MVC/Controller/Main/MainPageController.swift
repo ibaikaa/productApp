@@ -71,7 +71,7 @@ class MainPageController: UIViewController {
         
         view.addSubview(deliveryMethodsCollectionView)
         deliveryMethodsCollectionView.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(150)
+            make.top.equalToSuperview().offset(100)
             make.left.equalToSuperview().offset(4)
             make.right.equalToSuperview().offset(4)
             make.height.equalTo(40)
@@ -79,10 +79,10 @@ class MainPageController: UIViewController {
         
         view.addSubview(categoriesCollectionView)
         categoriesCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(deliveryMethodsCollectionView.snp.bottom).offset(20)
+            make.top.equalTo(deliveryMethodsCollectionView.snp.bottom).offset(16)
             make.left.equalToSuperview().offset(4)
             make.right.equalToSuperview().offset(-4)
-            make.height.equalTo(110)
+            make.height.equalTo(120)
         }
     }
     
@@ -152,7 +152,7 @@ extension MainPageController: UICollectionViewDelegateFlowLayout {
         if collectionView == deliveryMethodsCollectionView {
             return CGSize(width: 150, height: 40)
         } else {
-            return CGSize(width: 110, height: 110)
+            return CGSize(width: 110, height: 120)
         }
     }
     

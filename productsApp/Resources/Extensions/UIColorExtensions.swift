@@ -31,4 +31,8 @@ extension UIColor {
     static var viewBackgroundColor: UIColor {
         #colorLiteral(red: 0.9764705882, green: 0.9764705882, blue: 0.9764705882, alpha: 0.9487531043)
     }
+    
+    static var smartphonesIconColor: UIColor {
+        #colorLiteral(red: 0.9411764706, green: 0.9411764706, blue: 0.9411764706, alpha: 1)
+    }
 }
