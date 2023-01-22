@@ -46,7 +46,6 @@ class DeliveryMethodCollectionViewCell: UICollectionViewCell {
             deliveryMethodNameLabel.textColor = .cellLightContent
             deliveryMethodIconImageView.tintColor = .cellLightContent
         }
-        initUI()
     }
     
     private func initUI() {
@@ -64,7 +63,11 @@ class DeliveryMethodCollectionViewCell: UICollectionViewCell {
             make.right.equalToSuperview().offset(-8)
             make.centerY.equalToSuperview()
         }
-        
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        initUI()
     }
     
 }

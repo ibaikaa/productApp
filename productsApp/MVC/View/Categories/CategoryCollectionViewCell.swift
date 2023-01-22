@@ -41,7 +41,6 @@ class CategoryCollectionViewCell: UICollectionViewCell {
     
     //Configure
     public func configure(category: Category) {
-        initUI()
         categoryImageView.image = UIImage(named: category.categoryImage)
         categoryNameLabel.text = category.categoryName
     }
@@ -63,5 +62,10 @@ class CategoryCollectionViewCell: UICollectionViewCell {
             make.left.equalToSuperview().offset(4)
             make.right.equalToSuperview().offset(-4)
         }
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        initUI()
     }
 }

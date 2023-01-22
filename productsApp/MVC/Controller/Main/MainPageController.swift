@@ -116,7 +116,7 @@ class MainPageController: UIViewController {
         productsTableView.snp.makeConstraints { make in
             make.top.equalTo(categoriesCollectionView.snp.bottom).offset(20)
             make.left.right.equalToSuperview()
-            make.bottom.equalToSuperview()
+            make.bottom.equalToSuperview().offset(-100)
         }
     }
     
@@ -275,6 +275,8 @@ extension MainPageController: UITableViewDataSource {
     -> UITableViewCell {
         let cell = productsTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         cell.textLabel?.text = productsModel.products[indexPath.row].title
+        cell.textLabel?.backgroundColor = .clear
+        cell.backgroundColor = .clear
         return cell
     }
     

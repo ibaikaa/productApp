@@ -24,6 +24,7 @@
 		8C3346C5297C3291008A1DA9 /* MainPageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C26E14B29774F1F0091C2D1 /* MainPageController.swift */; };
 		8C3346C8297C39B2008A1DA9 /* UIColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3346C7297C39B2008A1DA9 /* UIColorExtensions.swift */; };
 		8C3346CB297D190A008A1DA9 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3346CA297D190A008A1DA9 /* NetworkManager.swift */; };
+		8C3346CE297D31B5008A1DA9 /* ProductTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3346CD297D31B5008A1DA9 /* ProductTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,6 +47,7 @@
 		8C3346C2297C181F008A1DA9 /* SearchPageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchPageController.swift; sourceTree = "<group>"; };
 		8C3346C7297C39B2008A1DA9 /* UIColorExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExtensions.swift; sourceTree = "<group>"; };
 		8C3346CA297D190A008A1DA9 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+		8C3346CD297D31B5008A1DA9 /* ProductTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductTableViewCell.swift; sourceTree = "<group>"; };
 		BE9DE4F012B16AAE287D06C0 /* Pods_productsApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_productsApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D75E7C21A00ECE40DA92D42E /* Pods-productsApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-productsApp.debug.xcconfig"; path = "Target Support Files/Pods-productsApp/Pods-productsApp.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -136,6 +138,7 @@
 		8C26E15E29774F770091C2D1 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				8C3346CC297D31AC008A1DA9 /* Products */,
 				8C3346B029797843008A1DA9 /* Categories */,
 				8C26E16029774FAF0091C2D1 /* OrderMethod */,
 			);
@@ -247,6 +250,14 @@
 				8C3346CA297D190A008A1DA9 /* NetworkManager.swift */,
 			);
 			path = NetworkManager;
+			sourceTree = "<group>";
+		};
+		8C3346CC297D31AC008A1DA9 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8C3346CD297D31B5008A1DA9 /* ProductTableViewCell.swift */,
+			);
+			path = Products;
 			sourceTree = "<group>";
 		};
 		F592E23ED9503DE60DC70080 /* Frameworks */ = {
@@ -373,6 +384,7 @@
 			files = (
 				8C3346C5297C3291008A1DA9 /* MainPageController.swift in Sources */,
 				8C3346C1297C1803008A1DA9 /* AddPageController.swift in Sources */,
+				8C3346CE297D31B5008A1DA9 /* ProductTableViewCell.swift in Sources */,
 				8C3346C8297C39B2008A1DA9 /* UIColorExtensions.swift in Sources */,
 				8C3346B629797A29008A1DA9 /* CategoryCollectionViewCell.swift in Sources */,
 				8C26E168297754400091C2D1 /* DeliveryMethod.swift in Sources */,
