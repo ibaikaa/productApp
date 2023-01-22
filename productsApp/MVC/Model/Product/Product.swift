@@ -7,11 +7,11 @@
 
 import Foundation
 
-struct Products {
+struct Products: Codable {
     let products: [Product]
 }
 
-struct Product {
+struct Product: Codable {
     let title, description: String
     let price: Int
     let discountPercentage, rating: Double
@@ -19,3 +19,6 @@ struct Product {
     let brand, category: String
     let thumbnail: String
 }
+
+
+

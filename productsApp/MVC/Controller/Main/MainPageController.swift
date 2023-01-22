@@ -10,50 +10,77 @@ import SnapKit
 class MainPageController: UIViewController {
     
     //MARK: Models
-    //productModel
     private var deliveryMethodModel = DeliveryMethodGroup.deliveryMethods()
     private var categoryModel = CategoryGroup.categories()
+    private var productsModel = Products(products: [])
+    
+    private func getProductsData() {
+        NetworkManager.shared.fetchData { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let products):
+                    self.productsModel = products
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+                self.productsTableView.reloadData()
+            }
+        }
+    }
     
     //MARK: Delivery Methods UICollectionView
-    //Setting up order methods collection view
     private lazy var deliveryMethodsCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.backgroundColor = .clear
-        collectionView.register(
-            DeliveryMethodCollectionViewCell.self,
-            forCellWithReuseIdentifier: DeliveryMethodCollectionViewCell.reuseID
-        )
         return collectionView
     }()
     
-    //Method to conform collection view DeliveryMethodsCollectionView Delegate and DataSource protocols
     private func configureDeliveryMethodsCollectionView () {
+        deliveryMethodsCollectionView.register(
+            DeliveryMethodCollectionViewCell.self,
+            forCellWithReuseIdentifier: DeliveryMethodCollectionViewCell.reuseID
+        )
         deliveryMethodsCollectionView.dataSource = self
         deliveryMethodsCollectionView.delegate = self
     }
     
+    
     //MARK: Categories UICollectionView
-    //Setting up order categories collection view
     private lazy var categoriesCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.backgroundColor = .clear
-        collectionView.register (
-            CategoryCollectionViewCell.self,
-            forCellWithReuseIdentifier: CategoryCollectionViewCell.reuseID
-        )
         return collectionView
     }()
     
-    //Method to conform collection view CategoriesMethodsCollectionView Delegate and DataSource protocols
     private func configureCategoriesCollectionView () {
+        categoriesCollectionView.register (
+            CategoryCollectionViewCell.self,
+            forCellWithReuseIdentifier: CategoryCollectionViewCell.reuseID
+        )
         categoriesCollectionView.dataSource = self
         categoriesCollectionView.delegate = self
+    }
+    
+    //MARK: Products UITableView
+    private lazy var productsTableView: UITableView = {
+        let tableView = UITableView()
+        tableView.backgroundColor = .clear
+        return tableView
+    }()
+    
+    private func configureProductsTableView() {
+        productsTableView.register(
+            UITableViewCell.self,
+            forCellReuseIdentifier: "cell"
+        )
+        productsTableView.dataSource = self
+        productsTableView.delegate = self
     }
     
     //productsTableView
@@ -84,16 +111,26 @@ class MainPageController: UIViewController {
             make.right.equalToSuperview().offset(-4)
             make.height.equalTo(120)
         }
+        
+        view.addSubview(productsTableView)
+        productsTableView.snp.makeConstraints { make in
+            make.top.equalTo(categoriesCollectionView.snp.bottom).offset(20)
+            make.left.right.equalToSuperview()
+            make.bottom.equalToSuperview()
+        }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         //Setting up background color and constraints of UI-elements for this page
         updateUI()
-        //Calling the method that configures DeliveryMethodsCollectionView
+        //Configuring collectionViews and tableView
         configureDeliveryMethodsCollectionView()
-        //Calling the method that configures CategoriesCollectionView
         configureCategoriesCollectionView()
+        configureProductsTableView()
+        //Getting data from API
+        getProductsData()
+        
     }
 }
 
@@ -222,3 +259,28 @@ extension MainPageController {
     }
 }
 
+extension MainPageController: UITableViewDataSource {
+    func tableView(
+        _ tableView: UITableView,
+        numberOfRowsInSection section: Int
+    )
+    -> Int {
+        return productsModel.products.count
+    }
+    
+    func tableView(
+        _ tableView: UITableView,
+        cellForRowAt indexPath: IndexPath
+    )
+    -> UITableViewCell {
+        let cell = productsTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        cell.textLabel?.text = productsModel.products[indexPath.row].title
+        return cell
+    }
+    
+    
+}
+
+extension MainPageController: UITableViewDelegate {
+    
+}
