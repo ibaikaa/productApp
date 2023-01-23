@@ -52,7 +52,7 @@ class ProductTableViewCell: UITableViewCell {
     private lazy var productImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.backgroundColor = .clear
-        imageView.contentMode = .scaleToFill
+        imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
@@ -276,22 +276,24 @@ class ProductTableViewCell: UITableViewCell {
 }
 
 extension ProductTableViewCell {
-    private func getData(
-        from url: URL,
-        completion: @escaping (
-            Data?,
-            URLResponse?,
-            Error?
-        ) -> ()
-    ) {
-        URLSession.shared.dataTask(with: url, completionHandler: completion).resume()
-    }
     
-    private func downloadImage(from url: URL, to imageView: UIImageView) {
-        DispatchQueue.main.async {
-            self.loadingIndicator.startAnimating()
+    private func showOrHideCellSubviews(show: Bool) {
+        switch show {
+        case true:
+            //Show
+            self.productImageView.isHidden = false
+            self.productTitleLabel.isHidden = false
+            self.productDescriptionLabel.isHidden = false
+            self.productCategoryButton.isHidden = false
+            self.productBrandButton.isHidden = false
+            self.ratingIconImageView.isHidden = false
+            self.ratingLabel.isHidden = false
+            self.productsInStockLabel.isHidden = false
+            self.discountBackgroundView.isHidden = false
+            self.discountLabel.isHidden = false
+            self.productPriceLabel.isHidden = false
             
-            //Hide UI-elements
+        case false:
             self.productImageView.isHidden = true
             self.productTitleLabel.isHidden = true
             self.productDescriptionLabel.isHidden = true
@@ -304,29 +306,32 @@ extension ProductTableViewCell {
             self.discountLabel.isHidden = true
             self.productPriceLabel.isHidden = true
         }
+    }
+    
+    private func getData (
+        from url: URL,
+        completion: @escaping ( Data?, URLResponse?, Error?) -> ()
+    ) {
+        URLSession.shared.dataTask(with: url, completionHandler: completion).resume()
+    }
+    
+    private func downloadImage(from url: URL, to imageView: UIImageView) {
+        //Hide elements and start loadingIndicator animating asynchronously
+        DispatchQueue.main.async {
+            self.loadingIndicator.startAnimating()
+            self.showOrHideCellSubviews(show: false)
+        }
         
-        print("Download Started")
+        //Download started
         getData(from: url) { data, response, error in
             guard let data = data, error == nil else { return }
-            print(response?.suggestedFilename ?? url.lastPathComponent)
-            print("Download Finished")
+            //Set image, stop loadingIndicator animating ahd show elements asynchronously
             DispatchQueue.main.async {
                 imageView.image = UIImage(data: data)
                 self.loadingIndicator.stopAnimating()
-                
-                //Show UI-elements
-                self.productImageView.isHidden = false
-                self.productTitleLabel.isHidden = false
-                self.productDescriptionLabel.isHidden = false
-                self.productCategoryButton.isHidden = false
-                self.productBrandButton.isHidden = false
-                self.ratingIconImageView.isHidden = false
-                self.ratingLabel.isHidden = false
-                self.productsInStockLabel.isHidden = false
-                self.discountBackgroundView.isHidden = false
-                self.discountLabel.isHidden = false
-                self.productPriceLabel.isHidden = false
+                self.showOrHideCellSubviews(show: true)
             }
         }
+        
     }
 }

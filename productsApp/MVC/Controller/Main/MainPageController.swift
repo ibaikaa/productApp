@@ -118,7 +118,7 @@ class MainPageController: UIViewController {
     private var categories: [String] {
         Array(categoryModel.productsOfCategory.keys).sorted(by: >)
     }
-    
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         //Setting up background color and constraints of UI-elements for this page
@@ -174,13 +174,9 @@ extension MainPageController: UICollectionViewDataSource {
             }
             
             let categoryName = categories[indexPath.row].capitalized
-            cell
-                .configure(
-                    category: Category(
-                        categoryName: categoryName,
-                        categoryImage: categoryName.lowercased()
-                    )
-                )
+            cell.configure(
+                category: Category(categoryName: categoryName, categoryImage: categoryName.lowercased())
+            )
             return cell
         }
     }
@@ -217,15 +213,11 @@ extension MainPageController: UICollectionViewDelegateFlowLayout, NavigateToCate
                 .cellForItem(at: indexPath) as? DeliveryMethodCollectionViewCell else {
                 fatalError()
             }
-            
             avoidUnchoosingAllDeliveryMethods(currentCell: cell)
-            
             //Switching state for tapped cell
             deliveryMethodModel.deliveryMethods[indexPath.row].isCurrentMethod = !deliveryMethodModel.deliveryMethods[indexPath.row].isCurrentMethod
-            
             //Switching methods if needed
             switchMethodState(for: cell)
-            
             //Reloading data for this collection view
             deliveryMethodsCollectionView.reloadData()
         } else {
@@ -233,15 +225,24 @@ extension MainPageController: UICollectionViewDelegateFlowLayout, NavigateToCate
             let categoryViewController = CategoryViewController()
             passData(to: categoryViewController, categoryName: categoryName)
             goToCategoryViewController(vc: categoryViewController)
-            //show vc with tableview with all products of category
         }
     }
 }
 
-
-
 //MARK: Extend MainPageController for all the necessary methods and properties for the Extension of DeliveryMethodsCollectionView Delegate
 extension MainPageController {
+    
+    //Alert
+    private var errorAlertInDeliveryMethodsCollectionView: UIAlertController {
+        let errorAlert = UIAlertController (
+            title: "Must choose at least one of the delivery methods!",
+            message: nil,
+            preferredStyle: .alert
+        )
+        errorAlert.addAction(UIAlertAction(title: "OK", style: .default))
+        return errorAlert
+    }
+    
     //This method allows to avoid unchoosing all the methods that are given
     private func avoidUnchoosingAllDeliveryMethods(currentCell: DeliveryMethodCollectionViewCell) {
         for method in deliveryMethodModel.deliveryMethods {
@@ -254,23 +255,6 @@ extension MainPageController {
         }
     }
     
-    //Alert
-    private var errorAlertInDeliveryMethodsCollectionView: UIAlertController {
-        let errorAlert = UIAlertController (
-            title: "Must choose at least one of the delivery methods!",
-            message: nil,
-            preferredStyle: .alert
-        )
-        
-        errorAlert.addAction(
-            UIAlertAction (
-                title: "OK",
-                style: .default
-            )
-        )
-        return errorAlert
-    }
-    
     private func switchMethodState(for cell: DeliveryMethodCollectionViewCell) {
         for i in 0..<deliveryMethodModel.deliveryMethods.count {
             if deliveryMethodModel.deliveryMethods[i].isCurrentMethod && deliveryMethodModel.deliveryMethods[i].name != cell.getDeliveryMethodNameLabel().text {
@@ -278,9 +262,30 @@ extension MainPageController {
             }
         }
     }
+    
 }
 
-extension MainPageController: UITableViewDataSource , NavigateToBrandVC{
+extension MainPageController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int ) -> Int { productsModel.products.count }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath )
+    -> UITableViewCell {
+        guard let cell = productsTableView.dequeueReusableCell(
+            withIdentifier: ProductTableViewCell.reuseId,
+            for: indexPath
+        ) as? ProductTableViewCell else {
+            fatalError()
+        }
+        
+        let product = productsModel.products[indexPath.row]
+        cell.configureCell(product: product)
+        return cell
+    }
+    
+}
+
+extension MainPageController: UITableViewDelegate, NavigateToBrandVC {
+    
     func passData(to vc: BrandViewController, brandName: String) {
         vc.brandModel = brandsModel
         vc.brandName = brandName
@@ -291,63 +296,40 @@ extension MainPageController: UITableViewDataSource , NavigateToBrandVC{
         navigationController?.pushViewController(vc, animated: true)
     }
     
-    func tableView(
-        _ tableView: UITableView,
-        numberOfRowsInSection section: Int
-    )
-    -> Int {
-        return productsModel.products.count
+    func tableView( _ tableView: UITableView, heightForRowAt indexPath: IndexPath ) -> CGFloat { 380 }
+    
+    func deleteTheProduct() {
+        //delete
     }
     
-    func tableView(
-        _ tableView: UITableView,
-        cellForRowAt indexPath: IndexPath
-    )
-    -> UITableViewCell {
-        guard let cell = productsTableView
-            .dequeueReusableCell(
-                withIdentifier: ProductTableViewCell.reuseId,
-                for: indexPath
-            ) as? ProductTableViewCell else {
-            print("error in cell")
-            fatalError()
-        }
-        let product = productsModel.products[indexPath.row]
-        cell.configureCell(product: product)
-        return cell
+    func viewBrandsProducts(brandName: String) {
+        let brandsVC = BrandViewController()
+        passData(to: brandsVC, brandName: brandName)
+        goToBrandViewController(vc: brandsVC)
     }
     
-    
-    func tableView(
-        _ tableView: UITableView,
-        editingStyleForRowAt indexPath: IndexPath
-    )
-    -> UITableViewCell.EditingStyle {
-        return .delete
-    }
-    
-    func tableView(
-        _ tableView: UITableView
-        , trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath
-    )
-    -> UISwipeActionsConfiguration? {
-        let delete = UIContextualAction(style: .normal, title: "Delete 🗑️") { action, view, completion in
-            print("delete")
+    func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let brandName = productsModel.products[indexPath.row].brand
+        let action = UIContextualAction(
+            style: .normal, title: "View all \(brandName) products ⭐️" ) { [weak self] (action, view, completion) in
+            self?.viewBrandsProducts(brandName: brandName)
             completion(true)
         }
-        delete.backgroundColor = .red
-        let actions = UISwipeActionsConfiguration(actions: [delete])
-        return actions
+        action.backgroundColor = .customYellow
+        return UISwipeActionsConfiguration(actions: [action])
     }
     
-}
-
-extension MainPageController: UITableViewDelegate {
-    func tableView(
-        _ tableView: UITableView,
-        heightForRowAt indexPath: IndexPath
-    )
-    -> CGFloat { 380 }
+    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath )
+    -> UISwipeActionsConfiguration? {
+        let deleteAction = UIContextualAction(
+            style: .normal, title: "Delete 🗑️") { [weak self] (action, view, completion) in
+            self?.deleteTheProduct()
+            completion(true)
+        }
+        deleteAction.backgroundColor = .systemRed
+        return UISwipeActionsConfiguration(actions: [deleteAction])
+    }
 }
 
 

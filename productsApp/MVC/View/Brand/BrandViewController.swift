@@ -18,8 +18,6 @@ class BrandViewController: UIViewController {
         return self.brandModel.brandProducts[brandName] ?? []
     }
     
-    
-    
     private lazy var brandProductsTableView: UITableView = {
         let tableView = UITableView()
         tableView.backgroundColor = .clear
