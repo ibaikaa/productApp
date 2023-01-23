@@ -76,21 +76,12 @@ class MainPageController: UIViewController {
     
     private func configureProductsTableView() {
         productsTableView.register(
-            UITableViewCell.self,
-            forCellReuseIdentifier: "cell"
+            ProductTableViewCell.self,
+            forCellReuseIdentifier: ProductTableViewCell.reuseId
         )
         productsTableView.dataSource = self
         productsTableView.delegate = self
     }
-    
-    //productsTableView
-    //configureProductsTableView
-    //extend with 2 protocols
-    //custom tableview cell
-    //networklayer
-    //parse
-    //productmodel
-    
     
     //MARK: Method to make constraints
     private func updateUI () {
@@ -196,7 +187,8 @@ extension MainPageController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView == deliveryMethodsCollectionView {
             //creating cell by indexPath
-            guard let cell = deliveryMethodsCollectionView.cellForItem(at: indexPath) as? DeliveryMethodCollectionViewCell else {
+            guard let cell = deliveryMethodsCollectionView
+                .cellForItem(at: indexPath) as? DeliveryMethodCollectionViewCell else {
                 fatalError()
             }
             
@@ -273,16 +265,39 @@ extension MainPageController: UITableViewDataSource {
         cellForRowAt indexPath: IndexPath
     )
     -> UITableViewCell {
-        let cell = productsTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel?.text = productsModel.products[indexPath.row].title
-        cell.textLabel?.backgroundColor = .clear
-        cell.backgroundColor = .clear
+        guard let cell = productsTableView
+            .dequeueReusableCell(
+                withIdentifier: ProductTableViewCell.reuseId,
+                for: indexPath
+            ) as? ProductTableViewCell else {
+            print("error in cell")
+            fatalError()
+        }
+        let product = productsModel.products[indexPath.row]
+        cell.configureCell(product: product)
         return cell
     }
     
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        return .delete
+    }
+    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        
+        let delete = UIContextualAction(style: .normal, title: "Delete 🗑️") { action, view, completion in
+            print("delete")
+        }
+        delete.backgroundColor = .red
+        
+        let actions = UISwipeActionsConfiguration(actions: [delete])
+        return actions
+    }
     
 }
 
 extension MainPageController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 380
+    }
     
 }
