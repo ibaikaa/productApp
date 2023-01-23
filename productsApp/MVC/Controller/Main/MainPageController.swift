@@ -11,8 +11,9 @@ class MainPageController: UIViewController {
     
     //MARK: Models
     private var deliveryMethodModel = DeliveryMethodGroup.deliveryMethods()
-    private var categoryModel = CategoryGroup.categories()
+    private var categoryModel = CategoryGroup.init(productsOfCategory: [:])
     private var productsModel = Products(products: [])
+    private var brandsModel = BrandGroup(brandProducts: [:])
     
     private func getProductsData() {
         NetworkManager.shared.fetchData { result in
@@ -20,9 +21,12 @@ class MainPageController: UIViewController {
                 switch result {
                 case .success(let products):
                     self.productsModel = products
+                    self.categoryModel = CategoryGroup.productsOfCategory(data: products)
+                    self.brandsModel = BrandGroup.productsOfBrand(data: products)
                 case .failure(let error):
                     print(error.localizedDescription)
                 }
+                self.categoriesCollectionView.reloadData()
                 self.productsTableView.reloadData()
             }
         }
@@ -111,6 +115,10 @@ class MainPageController: UIViewController {
         }
     }
     
+    private var categories: [String] {
+        Array(categoryModel.productsOfCategory.keys).sorted(by: >)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         //Setting up background color and constraints of UI-elements for this page
@@ -135,7 +143,8 @@ extension MainPageController: UICollectionViewDataSource {
         if collectionView == deliveryMethodsCollectionView {
             return deliveryMethodModel.deliveryMethods.count
         } else {
-            return categoryModel.categories.count
+            print("Count: \(categoryModel.productsOfCategory.count)")
+            return categoryModel.productsOfCategory.count
         }
     }
     
@@ -163,14 +172,21 @@ extension MainPageController: UICollectionViewDataSource {
                 ) as? CategoryCollectionViewCell else {
                 fatalError()
             }
-            let category = categoryModel.categories[indexPath.row]
-            cell.configure(category: category)
+            
+            let categoryName = categories[indexPath.row].capitalized
+            cell
+                .configure(
+                    category: Category(
+                        categoryName: categoryName,
+                        categoryImage: categoryName.lowercased()
+                    )
+                )
             return cell
         }
     }
 }
 
-extension MainPageController: UICollectionViewDelegateFlowLayout {
+extension MainPageController: UICollectionViewDelegateFlowLayout, NavigateToCategoryVC {
     func collectionView(
         _ collectionView: UICollectionView,
         layout collectionViewLayout: UICollectionViewLayout,
@@ -182,6 +198,16 @@ extension MainPageController: UICollectionViewDelegateFlowLayout {
         } else {
             return CGSize(width: 110, height: 120)
         }
+    }
+    
+    func passData(to vc: CategoryViewController, categoryName: String) {
+        vc.categoryModel = self.categoryModel
+        vc.categoryName = categoryName
+        vc.title = categoryName.capitalized
+    }
+    
+    func goToCategoryViewController(vc: CategoryViewController) {
+        navigationController?.pushViewController(vc, animated: true)
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -203,12 +229,15 @@ extension MainPageController: UICollectionViewDelegateFlowLayout {
             //Reloading data for this collection view
             deliveryMethodsCollectionView.reloadData()
         } else {
-            guard let _ = categoriesCollectionView.cellForItem(at: indexPath) as? CategoryCollectionViewCell else {
-                fatalError()
-            }
+            let categoryName = categories[indexPath.row]
+            let categoryViewController = CategoryViewController()
+            passData(to: categoryViewController, categoryName: categoryName)
+            goToCategoryViewController(vc: categoryViewController)
+            //show vc with tableview with all products of category
         }
     }
 }
+
 
 
 //MARK: Extend MainPageController for all the necessary methods and properties for the Extension of DeliveryMethodsCollectionView Delegate
@@ -228,7 +257,7 @@ extension MainPageController {
     //Alert
     private var errorAlertInDeliveryMethodsCollectionView: UIAlertController {
         let errorAlert = UIAlertController (
-            title: "Должен быть выбран хотя бы 1 из методов доставки.",
+            title: "Must choose at least one of the delivery methods!",
             message: nil,
             preferredStyle: .alert
         )
@@ -251,7 +280,17 @@ extension MainPageController {
     }
 }
 
-extension MainPageController: UITableViewDataSource {
+extension MainPageController: UITableViewDataSource , NavigateToBrandVC{
+    func passData(to vc: BrandViewController, brandName: String) {
+        vc.brandModel = brandsModel
+        vc.brandName = brandName
+        vc.title = brandName
+    }
+    
+    func goToBrandViewController(vc: BrandViewController) {
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
     func tableView(
         _ tableView: UITableView,
         numberOfRowsInSection section: Int
@@ -278,17 +317,25 @@ extension MainPageController: UITableViewDataSource {
         return cell
     }
     
-    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+    
+    func tableView(
+        _ tableView: UITableView,
+        editingStyleForRowAt indexPath: IndexPath
+    )
+    -> UITableViewCell.EditingStyle {
         return .delete
     }
     
-    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        
+    func tableView(
+        _ tableView: UITableView
+        , trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath
+    )
+    -> UISwipeActionsConfiguration? {
         let delete = UIContextualAction(style: .normal, title: "Delete 🗑️") { action, view, completion in
             print("delete")
+            completion(true)
         }
         delete.backgroundColor = .red
-        
         let actions = UISwipeActionsConfiguration(actions: [delete])
         return actions
     }
@@ -296,8 +343,11 @@ extension MainPageController: UITableViewDataSource {
 }
 
 extension MainPageController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 380
-    }
-    
+    func tableView(
+        _ tableView: UITableView,
+        heightForRowAt indexPath: IndexPath
+    )
+    -> CGFloat { 380 }
 }
+
+

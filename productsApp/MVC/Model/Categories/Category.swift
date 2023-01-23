@@ -12,21 +12,26 @@ public struct Category {
 }
 
 public struct CategoryGroup {
-    let categories: [Category]
+    var productsOfCategory: [String: [Product]]
 }
 
 extension CategoryGroup {
 
-    public static func categories() -> CategoryGroup {
-        let categories: [Category] = [
-            .init(categoryName: "Smartphones", categoryImage: "phones"),
-            .init(categoryName: "Laptops", categoryImage: "laptops"),
-            .init(categoryName: "Fragrances", categoryImage: "fragrances"),
-            .init(categoryName: "Home-decoration", categoryImage: "home-decoration"),
-            .init(categoryName: "Groceries", categoryImage: "groceries"),
-            .init(categoryName: "Skincare", categoryImage: "skin-care"),
-        ]
+    internal static func productsOfCategory(data: Products) -> CategoryGroup {
+        var categoryAndProducts: [String: [Product]] = [:]
         
-        return CategoryGroup(categories: categories)
+        for product in data.products {
+            categoryAndProducts[product.category] = []
+        }
+        
+        for product in data.products {
+            guard categoryAndProducts[product.category] != nil else {
+                print("some mess in producsOfCategory() method. Returned empty dict.")
+                return CategoryGroup(productsOfCategory: [:])
+            }
+            categoryAndProducts[product.category]!.append(product)
+        }
+        
+        return CategoryGroup(productsOfCategory: categoryAndProducts)
     }
 }

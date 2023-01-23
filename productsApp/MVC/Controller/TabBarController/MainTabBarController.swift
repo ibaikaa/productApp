@@ -12,15 +12,14 @@ class MainTabBarController: UITabBarController {
     //Method to create VC
     private func generateVC (
         viewController: UIViewController,
-        tabBarTitle: String,
-        navBarTitle: String,
+        title: String,
         image: UIImage?
     )
     -> UINavigationController {
         let vc = UINavigationController(rootViewController: viewController)
-        vc.tabBarItem.title = tabBarTitle
+        vc.tabBarItem.title = title
         vc.tabBarItem.image = image
-        vc.navigationBar.topItem?.title = navBarTitle
+        vc.navigationBar.topItem?.title = title
         return vc
     }
     
@@ -29,20 +28,17 @@ class MainTabBarController: UITabBarController {
         viewControllers = [
             generateVC(
                 viewController: SearchPageController(),
-                tabBarTitle: "Поиск",
-                navBarTitle: "Поиск 🕵️",
+                title: "Search",
                 image: UIImage(systemName: "magnifyingglass")
             ),
             generateVC(
                 viewController: MainPageController(),
-                tabBarTitle: "Главная",
-                navBarTitle: "Главная 🏠",
+                title: "Home",
                 image: UIImage(systemName: "house.fill")
             ),
             generateVC(
                 viewController: AddPageController(),
-                tabBarTitle: "Добавление",
-                navBarTitle: "Добавление ➕",
+                title: "Add product",
                 image: UIImage(systemName: "plus.app.fill")
             )
         ]

@@ -11,12 +11,42 @@ import SnapKit
 class ProductTableViewCell: UITableViewCell {
     static let reuseId: String = String(describing: ProductTableViewCell.self)
     
-    private func generateLabel(font name: String, size: CGFloat, textColor: UIColor) -> UILabel {
+    private func generateLabel(
+        font name: String,
+        size: CGFloat,
+        textColor: UIColor
+    )
+    -> UILabel {
         let label = UILabel()
         label.font = UIFont(name: name, size: size)
         label.textColor = textColor
         label.backgroundColor = .clear
         return label
+    }
+    
+    private func generateButton(
+        font name: String,
+        size: CGFloat,
+        textColor: UIColor,
+        backgroundColor: UIColor,
+        borderColor: CGColor?,
+        borderWidth: CGFloat?
+    )
+    -> UIButton {
+        //Customizable for all
+        let button = UIButton(type: .system)
+        button.setTitleColor(textColor, for: .normal)
+        button.titleLabel?.font = UIFont(name: name, size: size)
+        button.backgroundColor = backgroundColor
+        
+        //Optional
+        button.layer.borderColor = borderColor
+        button.layer.borderWidth = borderWidth ?? 0
+        //Default
+        button.titleLabel?.textAlignment = .center
+        button.layer.cornerRadius = 12
+        
+        return button
     }
     
     private lazy var productImageView: UIImageView = {
@@ -99,21 +129,25 @@ class ProductTableViewCell: UITableViewCell {
         )
     }()
     
-    private lazy var productBrandLabel: UILabel = {
-        let label = generateLabel(font: "Avenir Next", size: 16, textColor: .systemBlue)
-        label.layer.cornerRadius = 12
-        label.layer.borderWidth = 1
-        label.layer.borderColor = UIColor.systemBlue.cgColor
+    private lazy var productBrandButton: UILabel = {
+        let label = generateLabel(font: "Avenir Next Bold", size: 16, textColor: .white)
+        label.backgroundColor = .systemBlue
+        label.clipsToBounds = true
         label.textAlignment = .center
+        label.layer.cornerRadius = 8
         return label
     }()
     
-    private lazy var productCategory: UILabel = {
+    private lazy var productCategoryButton: UILabel = {
         let label = generateLabel(font: "Avenir Next Italic", size: 16, textColor: .systemGreen)
-        label.layer.cornerRadius = 12
+        label.backgroundColor = .clear
+        //Border
         label.layer.borderWidth = 1
         label.layer.borderColor = UIColor.systemGreen.cgColor
+        
+        label.clipsToBounds = true
         label.textAlignment = .center
+        label.layer.cornerRadius = 8
         return label
     }()
     
@@ -137,8 +171,8 @@ class ProductTableViewCell: UITableViewCell {
         discountLabel.text = "\(product.discountPercentage)% off!"
         ratingLabel.text = "\(product.rating)"
         productsInStockLabel.text = "(\(product.stock) in stock)"
-        productBrandLabel.text = product.brand
-        productCategory.text = "#\(product.category)"
+        productBrandButton.text = product.brand
+        productCategoryButton.text = product.category
     }
     
     private func initUI() {
@@ -217,27 +251,21 @@ class ProductTableViewCell: UITableViewCell {
             make.right.equalToSuperview().offset(-16)
         }
         
-        addSubview(productBrandLabel)
-        productBrandLabel.snp.makeConstraints { make in
+        addSubview(productBrandButton)
+        productBrandButton.snp.makeConstraints { make in
             make.top.equalTo(productDescriptionLabel.snp.bottom).offset(10)
             make.left.equalToSuperview().offset(16)
             make.right.equalTo(productPriceLabel.snp.left).offset(-30)
             make.height.equalTo(30)
         }
         
-        addSubview(productCategory)
-        productCategory.snp.makeConstraints { make in
-            make.top.equalTo(productBrandLabel.snp.bottom).offset(10)
+        addSubview(productCategoryButton)
+        productCategoryButton.snp.makeConstraints { make in
+            make.top.equalTo(productBrandButton.snp.bottom).offset(10)
             make.left.equalToSuperview().offset(16)
             make.right.equalToSuperview().offset(-16)
             make.height.equalTo(30)
         }
-        
-        
-        
-     
-        
-
     }
     
     override func layoutSubviews() {
@@ -267,18 +295,16 @@ extension ProductTableViewCell {
             self.productImageView.isHidden = true
             self.productTitleLabel.isHidden = true
             self.productDescriptionLabel.isHidden = true
-            self.productCategory.isHidden = true
-            self.productBrandLabel.isHidden = true
+            self.productCategoryButton.isHidden = true
+            self.productBrandButton.isHidden = true
             self.ratingIconImageView.isHidden = true
             self.ratingLabel.isHidden = true
             self.productsInStockLabel.isHidden = true
             self.discountBackgroundView.isHidden = true
             self.discountLabel.isHidden = true
             self.productPriceLabel.isHidden = true
-         
-      
-            
         }
+        
         print("Download Started")
         getData(from: url) { data, response, error in
             guard let data = data, error == nil else { return }
@@ -292,8 +318,8 @@ extension ProductTableViewCell {
                 self.productImageView.isHidden = false
                 self.productTitleLabel.isHidden = false
                 self.productDescriptionLabel.isHidden = false
-                self.productCategory.isHidden = false
-                self.productBrandLabel.isHidden = false
+                self.productCategoryButton.isHidden = false
+                self.productBrandButton.isHidden = false
                 self.ratingIconImageView.isHidden = false
                 self.ratingLabel.isHidden = false
                 self.productsInStockLabel.isHidden = false
