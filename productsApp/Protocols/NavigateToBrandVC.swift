@@ -8,7 +8,7 @@
 import UIKit
 
 protocol NavigateToBrandVC {
-    func passData(to vc: BrandViewController, brandName: String)
-    func goToBrandViewController(vc: BrandViewController)
+    func passData(to destinationVC: BrandViewController, brandName: String)
+    func goToBrandViewController(destinationVC: BrandViewController)
 }
 

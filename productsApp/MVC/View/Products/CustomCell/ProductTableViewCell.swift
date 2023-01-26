@@ -23,32 +23,7 @@ class ProductTableViewCell: UITableViewCell {
         label.backgroundColor = .clear
         return label
     }
-    
-    private func generateButton(
-        font name: String,
-        size: CGFloat,
-        textColor: UIColor,
-        backgroundColor: UIColor,
-        borderColor: CGColor?,
-        borderWidth: CGFloat?
-    )
-    -> UIButton {
-        //Customizable for all
-        let button = UIButton(type: .system)
-        button.setTitleColor(textColor, for: .normal)
-        button.titleLabel?.font = UIFont(name: name, size: size)
-        button.backgroundColor = backgroundColor
         
-        //Optional
-        button.layer.borderColor = borderColor
-        button.layer.borderWidth = borderWidth ?? 0
-        //Default
-        button.titleLabel?.textAlignment = .center
-        button.layer.cornerRadius = 12
-        
-        return button
-    }
-    
     private lazy var productImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.backgroundColor = .clear
@@ -271,6 +246,7 @@ class ProductTableViewCell: UITableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         initUI()
+        noSelectionStyle(on: true)
     }
     
 }
@@ -332,6 +308,11 @@ extension ProductTableViewCell {
                 self.showOrHideCellSubviews(show: true)
             }
         }
-        
+    }
+}
+
+extension ProductTableViewCell: NonHighlightableCell {
+    func noSelectionStyle(on state: Bool) {
+        self.selectionStyle = state ? .none : .default
     }
 }

@@ -26,8 +26,6 @@ class DeliveryMethodCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
-    public func getDeliveryMethodNameLabel () -> UILabel { deliveryMethodNameLabel }
-    
     public func configure(method: DeliveryMethod) {
         self.layer.cornerRadius = 16
         self.layer.borderColor =  UIColor(red: 0.878, green: 0.878, blue: 0.878, alpha: 1).cgColor

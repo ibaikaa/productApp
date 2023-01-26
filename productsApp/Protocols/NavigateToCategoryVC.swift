@@ -8,6 +8,6 @@
 import Foundation
 
 protocol NavigateToCategoryVC {
-    func passData(to vc: CategoryViewController, categoryName: String)
-    func goToCategoryViewController(vc: CategoryViewController)
+    func passData(to destinationVC: CategoryViewController, categoryName: String)
+    func goToCategoryViewController(destinationVC: CategoryViewController)
 }

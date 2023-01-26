@@ -53,9 +53,7 @@ class BrandViewController: UIViewController {
 }
 
 extension BrandViewController: UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        brandProducts.count
-    }
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { brandProducts.count }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = brandProductsTableView
@@ -63,7 +61,7 @@ extension BrandViewController: UITableViewDataSource {
                 withIdentifier: ProductTableViewCell.reuseId,
                 for: indexPath
             ) as? ProductTableViewCell else {
-            fatalError()
+            return UITableViewCell()
         }
         let product = brandProducts[indexPath.row]
         cell.configureCell(product: product)
@@ -71,11 +69,22 @@ extension BrandViewController: UITableViewDataSource {
     }
 }
 
-extension BrandViewController: UITableViewDelegate {
-    func tableView(
-        _ tableView: UITableView,
-        heightForRowAt indexPath: IndexPath
-    )
-    -> CGFloat { 380 }
+extension BrandViewController: UITableViewDelegate, ShowProductInDetailed {
+    func passData(to vc: ProductDetailedViewController, data: Product) {
+        vc.configureVC(with: data)
+    }
+    
+    func showProductDetailedViewController(_ vc: ProductDetailedViewController) {
+        Snippets.shared.createBottomSheetVC(from: vc)
+        present(vc, animated: true)
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat { 380 }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let productDetailedVC = ProductDetailedViewController()
+        passData(to: productDetailedVC, data: brandProducts[indexPath.row])
+        showProductDetailedViewController(productDetailedVC)
+    }
 }
 

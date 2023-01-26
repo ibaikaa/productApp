@@ -81,10 +81,26 @@ extension CategoryViewController: UITableViewDataSource {
     
 }
 
-extension CategoryViewController: UITableViewDelegate {
+extension CategoryViewController: UITableViewDelegate, ShowProductInDetailed {
+    func passData(to vc: ProductDetailedViewController, data: Product) {
+        vc.configureVC(with: data)
+    }
+    
+    func showProductDetailedViewController(_ vc: ProductDetailedViewController) {
+        Snippets.shared.createBottomSheetVC(from: vc)
+        present(vc, animated: true)
+    }
+    
     func tableView(
         _ tableView: UITableView,
         heightForRowAt indexPath: IndexPath
     )
     -> CGFloat { 380 }
+    
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let productDetailedVC = ProductDetailedViewController()
+        passData(to: productDetailedVC, data: categoryProducts[indexPath.row])
+        showProductDetailedViewController(productDetailedVC)
+    }
 }

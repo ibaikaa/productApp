@@ -7,9 +7,14 @@
 
 import UIKit
 
+
 class NetworkManager {
+    
     static let shared = NetworkManager()
-    func fetchData(completion: @escaping (Result<Products, Error>) -> Void) {
+    
+    typealias CompletionCallback = (_ resuilt: Result<Products, Error>) -> Void
+
+    func fetchData(completion: @escaping CompletionCallback) {
         let urlPath: String = "https://dummyjson.com/products"
         guard let url = URL(string: urlPath) else { print("URL Error in Network Manager"); return }
         let request = URLRequest(url: url)
